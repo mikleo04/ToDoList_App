@@ -17,13 +17,19 @@ class DetailTaskActivity : AppCompatActivity() {
         setContentView(R.layout.activity_task_detail)
 
         //TODO 11 : Show detail task and implement delete action
-        val task_id = intent.getIntExtra(TASK_ID, 0)
 
         val taskViewModel = ViewModelProvider(this, ViewModelFactory
             .getInstance(this))
             .get(DetailTaskViewModel::class.java)
-        taskViewModel.setTaskId(task_id)
+        taskViewModel.setTaskId(
+            intent.getIntExtra(TASK_ID, 0)
+        )
 
+        findViewById<Button>(R.id.btn_delete_task).setOnClickListener {
+            taskViewModel.deleteTask()
+            finish()
+        }
+        
         taskViewModel.task.observe(this){
             if (it != null){
                 findViewById<EditText>(R.id.detail_ed_title).setText(it.title)
@@ -31,10 +37,7 @@ class DetailTaskActivity : AppCompatActivity() {
                 findViewById<EditText>(R.id.detail_ed_due_date).setText(DateConverter.convertMillisToString(it.dueDateMillis))
             }
         }
-        findViewById<Button>(R.id.btn_delete_task).setOnClickListener {
-            taskViewModel.deleteTask()
-            finish()
-        }
+
 
     }
 }

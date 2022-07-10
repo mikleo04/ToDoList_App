@@ -40,28 +40,27 @@ class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
 
     override fun doWork(): Result {
         //TODO 14 : If notification preference on, get nearest active task from repository and show notification with pending intent
-        val channelId = "notification_channel_id"
         val nearestActiveTask = TaskRepository.getInstance(applicationContext).getNearestActiveTask()
-        val text = applicationContext.getString(R.string.notify_content)
-        val dueDate = DateConverter.convertMillisToString(nearestActiveTask.dueDateMillis)
 
         try {
-            var mBuilder = NotificationCompat.Builder(applicationContext, channelId)
+            var mBuilder = NotificationCompat.Builder(applicationContext, "MyNotification")
                 .setContentTitle(nearestActiveTask.title)
                 .setSmallIcon(R.drawable.ic_notifications)
                 .setContentIntent(getPendingIntent(nearestActiveTask))
-                .setContentText("$text $dueDate")
-            val notification = mBuilder.build()
+                .setContentText(applicationContext.getString(R.string.notify_content).format(
+                    DateConverter.convertMillisToString(nearestActiveTask.dueDateMillis)
+                ))
             val notificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notification = mBuilder.build()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+                val channel = NotificationChannel("MyNotification", channelName, NotificationManager.IMPORTANCE_DEFAULT)
                 channel.description = channelName
-                mBuilder.setChannelId(channelId)
+                mBuilder.setChannelId("MyNotification")
                 notificationManager.createNotificationChannel(channel)
             }
 
-            notificationManager.notify(123, notification)
+            notificationManager.notify(12345, notification)
         }catch (e: Exception){
             return Result.failure()
         }

@@ -17,11 +17,11 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 class TaskActivityTest {
     @Before
-    fun default(){
+    fun before(){
         ActivityScenario.launch(TaskActivity::class.java)
     }
     @Test
-    fun btnAddClickedAddTaskActivityLaunched() {
+    fun testBtnAddClickedAndAddTaskLaunched() {
         Intents.init()
         Espresso.onView(ViewMatchers.withId(R.id.fab)).perform(ViewActions.click())
         Intents.intended(IntentMatchers.hasComponent(AddTaskActivity::class.java.name))

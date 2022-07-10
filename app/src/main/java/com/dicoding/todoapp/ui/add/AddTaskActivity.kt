@@ -42,11 +42,19 @@ class AddTaskActivity : AppCompatActivity(), DatePickerFragment.DialogDateListen
                 val description = findViewById<EditText>(R.id.add_ed_description)
                 if (title.text.toString().isNotEmpty() and description.text.toString().isNotEmpty()){
                     addTaskViewModel.insertTask(
-                        Task(0, title.text.toString(), description.text.toString(), dueDateMillis )
+                        Task(0,
+                            title.text.toString(), 
+                            description.text.toString(),
+                            dueDateMillis 
+                        )
                     )
                     finish()
                 }else{
-                    Toast.makeText(this, "Please fill all field", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this, 
+                        "Please fill all field", 
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 true
             }
